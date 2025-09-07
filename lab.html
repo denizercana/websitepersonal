@@ -38,6 +38,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
 
     /* Logo image replaces text */
@@ -47,6 +48,56 @@
     .nav-links { display: flex; list-style: none; gap: 2rem; }
     .nav-links a { color: #ecf0f1; text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
     .nav-links a:hover { color: #3498db; }
+
+    /* Hamburger (hidden on desktop) */
+    .hamburger {
+      display: none;
+      background: transparent;
+      border: 0;
+      color: #ecf0f1;
+      font-size: 1.6rem;
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .hamburger:focus-visible { outline: 3px solid #6ea8ff; outline-offset: 2px; }
+
+    /* Mobile menu panel (initially hidden) */
+    @media (max-width: 640px) {
+      .hamburger { display: inline-flex; }
+
+      /* Hide inline links by default on mobile */
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        right: 12px;
+        left: 12px;
+        display: grid;
+        gap: 0;
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        border-radius: 14px;
+        box-shadow: 0 16px 36px rgba(0,0,0,.25);
+        padding: .5rem;
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform .2s ease, opacity .2s ease;
+      }
+      .nav-links li a {
+        display: block;
+        padding: .9rem 1rem;
+        border-radius: 10px;
+      }
+      .nav-links li a:focus-visible { outline: 3px solid #6ea8ff; outline-offset: 2px; }
+
+      /* When .navbar has .open, show panel */
+      .navbar.open .nav-links {
+        opacity: 1;
+        transform: translateY(8px);
+        pointer-events: auto;
+      }
+    }
 
     /* Main Content */
     .main-content { min-height: calc(100vh - 80px); }
@@ -172,19 +223,91 @@
     .team-info h3 { color: #2c3e50; font-size: 1.8rem; margin-bottom: 0.5rem; }
     .team-info .title { color: #3498db; font-size: 1.1rem; margin-bottom: 1rem; font-weight: 600; }
 
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }
-    .team-member { background: white; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-    .member-photo {
-      width: 200px; height: 200px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; display: block; background: #ddd;
-    }
+  .team-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;       /* equal heights in each row */
+  justify-items: center;      /* center cards within tracks */
+  }
+    .team-member{
+  width: 100%;
+  max-width: 680px;           /* prevents overly wide single card on mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.75rem;
+  gap: .75rem;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
 
-    /* Former section (single card left-aligned) */
-    #former-grid { grid-template-columns: 340px; justify-content: start; }
-    #former-benz .member-photo {
-      width: 120px !important; height: 120px !important; object-fit: cover; border-radius: 50%;
-      display: block; margin: 0 auto 1rem; border: 3px solid #3498db;
-    }
-    #former-benz { justify-self: start; }
+.team-member h4{ margin: 0; line-height: 1.25; }
+.team-member p { margin: 0; }
+
+/* identical, centered avatars regardless of source image canvas */
+.member-photo{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin: 0 auto .75rem;
+  border: 4px solid #3498db;
+  background: #fff; /* hides odd image canvas colors */
+}
+
+/* mobile tweaks */
+@media (max-width: 600px){
+  .team-grid{ grid-template-columns: 1fr; }
+  .team-member{ padding: 1.25rem; }
+  .member-photo{ width: 160px; height: 160px; }
+}
+    /* === Former Members alignment (match grad assistants) === */
+#former-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+  justify-items: center;
+}
+
+#former-grid .team-member{
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.75rem;
+  gap: .75rem;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+#former-grid .member-photo{
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin: 0 auto .75rem;
+  border: 4px solid #3498db;
+  background: #fff;
+}
+
+/* mobile tweaks */
+@media (max-width: 600px){
+  #former-grid{ grid-template-columns: 1fr; }
+  #former-grid .team-member{ padding: 1.25rem; }
+  #former-grid .member-photo{ width: 160px; height: 160px; }
+}
+
 
     /* --- Lab Focus refresh --- */
     .focus-hero{
@@ -301,64 +424,60 @@
     }
 
     /* Publications — new design */
-.publication-year { 
-  margin: 2rem 0;
-  animation: fadeInUp 0.6s ease-out; /* optional */
-}
-.publication-year h3 {
-  color: #2c3e50; 
-  font-size: 1.8rem; 
-  margin-bottom: 1.5rem; 
-  padding-bottom: 0.5rem; 
-  border-bottom: 3px solid #3498db;
-  position: relative;
-}
-.publication-year h3::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #e74c3c, #f39c12);
-}
+    .publication-year { 
+      margin: 2rem 0;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    .publication-year h3 {
+      color: #2c3e50; 
+      font-size: 1.8rem; 
+      margin-bottom: 1.5rem; 
+      padding-bottom: 0.5rem; 
+      border-bottom: 3px solid #3498db;
+      position: relative;
+    }
+    .publication-year h3::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #e74c3c, #f39c12);
+    }
+    .publication-item {
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      padding: 1.8rem; 
+      margin-bottom: 1.2rem; 
+      border-radius: 15px; 
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      border-left: 4px solid #3498db;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .publication-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.05), transparent);
+      transition: left 0.5s ease;
+    }
+    .publication-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      border-left-color: #2980b9;
+    }
+    .publication-item:hover::before { left: 100%; }
+    .publication-item .authors { font-weight: 600; color: #2c3e50; margin-bottom: 0.5rem; }
+    .publication-item .title   { font-style: italic; color: #34495e; margin-bottom: 0.3rem; }
+    .publication-item .journal { color: #3498db; font-weight: 500; }
+    .publication-item .doi     { font-size: 0.9rem; color: #7f8c8d; margin-top: 0.3rem; }
 
-/* each paper card */
-.publication-item {
-  background: linear-gradient(145deg, #ffffff, #f8f9fa);
-  padding: 1.8rem; 
-  margin-bottom: 1.2rem; 
-  border-radius: 15px; 
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  border-left: 4px solid #3498db;
-  position: relative;
-  overflow: hidden;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-.publication-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.05), transparent);
-  transition: left 0.5s ease;
-}
-.publication-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  border-left-color: #2980b9;
-}
-.publication-item:hover::before { left: 100%; }
-
-/* lines inside a card */
-.publication-item .authors { font-weight: 600; color: #2c3e50; margin-bottom: 0.5rem; }
-.publication-item .title   { font-style: italic; color: #34495e; margin-bottom: 0.3rem; }
-.publication-item .journal { color: #3498db; font-weight: 500; }
-.publication-item .doi     { font-size: 0.9rem; color: #7f8c8d; margin-top: 0.3rem; }
-
-    /* ===== News: upgraded styles from the new design ===== */
+    /* ===== News: upgraded styles ===== */
     .news-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -444,40 +563,56 @@
     @media (max-width: 1024px) { #home .focus-cards { grid-template-columns: repeat(3, minmax(220px, 1fr)); } }
     @media (max-width: 820px)   { #home .focus-cards { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
     @media (max-width: 560px)   {
-      .nav-links { display: none; }
+      /* Desktop inline links are hidden; hamburger used instead */
       .hero-content h1 { font-size: 2.5rem; }
       #home .focus-cards { grid-template-columns: 1fr; }
       #home .focus-card { padding: 1.25rem; }
       .contact-grid { grid-template-columns: 1fr; }
+      /* Smaller title spacing so content doesn't get pushed too far down on mobile */
+      .page:not(#home) { padding-top: calc(1.25rem + 72px); }
+      .focus-hero { grid-template-columns: 1fr; gap: 1.5rem; }
     }
     @media (max-width: 768px) {
       .team-leader { flex-direction: column; text-align: center; }
       .project-item { flex-direction: column; }
       .project-image { width: 100%; }
     }
+
+    /* Prevent scroll on body when menu is open */
+    body.menu-lock { overflow: hidden; }
   </style>
 </head>
 <body>
   <!-- Navigation -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="nav-container">
       <!-- LOGO IMAGE -->
-      <a href="#" class="logo" onclick="showPage('home')">
+      <a href="#" class="logo" onclick="showPage('home')" aria-label="Class Lab home">
         <img src="ClassLabLogo.png" alt="Class Lab Logo" class="logo-img">
       </a>
-      <ul class="nav-links">
+
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburger"
+              aria-label="Open menu"
+              aria-controls="primary-navigation"
+              aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Primary navigation -->
+      <ul class="nav-links" id="primary-navigation">
         <li><a href="#" onclick="showPage('about')">About Us</a></li>
         <li><a href="#" onclick="showPage('focus')">Lab Focus</a></li>
         <li><a href="#" onclick="showPage('projects')">Projects</a></li>
         <li><a href="#" onclick="showPage('publications')">Publications</a></li>
         <li><a href="#" onclick="showPage('news')">News</a></li>  
         <li><a href="#contact" id="nav-contact">Contact</a></li>
-    </ul>
+      </ul>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" id="main">
     <!-- Home Page -->
     <div id="home" class="page active">
       <div class="hero-section">
@@ -637,7 +772,7 @@
                  alt="CLASS Lab — Creative Learning through AI & Stealth Assessment in STEM">
           </div>
 
-          <div class="focus-copy">
+        <div class="focus-copy">
             <div class="mission-card">
               <p class="card-lead">
                 At Class Lab we explore how AI can be critically and effectively integrated into education while keeping human-centered learning at the core. 
@@ -656,7 +791,6 @@
         </p>
 
         <div class="focus-rows">
-          <!-- Stealth Assessment -->
           <article class="focus-row">
             <div class="row-media">
               <img src="stealth.png" alt="Game-based learning environment with embedded, seamless assessment">
@@ -673,7 +807,6 @@
             </div>
           </article>
 
-          <!-- Physics Learning (image on right) -->
           <article class="focus-row reverse">
             <div class="row-media">
               <img src="physics.png" alt="Interactive physics simulation where students test concepts">
@@ -691,7 +824,6 @@
             </div>
           </article>
 
-          <!-- Creativity -->
           <article class="focus-row">
             <div class="row-media">
               <img src="creativity.png" alt="Students collaborating on creative digital projects">
@@ -727,21 +859,17 @@
       </div>
     </div>
 
-    <!-- ================= Projects Page (replaced with the new design content) ================ -->
+    <!-- Projects Page -->
     <div id="projects" class="page">
       <div class="container">
         <h2 class="section-title">Projects</h2>
 
-        <!-- ===== Current Projects ===== -->
         <h3 style="color:#2c3e50; font-size:2rem; margin:1rem 0 1.25rem;">Current Projects</h3>
 
-        <!-- ProductiveMath -->
         <article class="proj-card">
-          <div
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Students working on mathematics problems collaboratively"
-            style="background-image:url('https://images.unsplash.com/photo-1596495578065-6e0763fa1178?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1596495578065-6e0763fa1178?q=80&w=1600&auto=format&fit=crop');">
           </div>
 
           <div class="proj-copy">
@@ -757,13 +885,10 @@
           </div>
         </article>
 
-        <!-- Creative -->
         <article class="proj-card">
-          <div
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Children collaborating on creative coding projects with laptops"
-            style="background-image:url('https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=1600&auto=format&fit=crop');">
           </div>
           <div class="proj-copy">
             <h3>Creative</h3>
@@ -778,13 +903,10 @@
           </div>
         </article>
 
-        <!-- Storiza -->
         <article class="proj-card">
-          <div 
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Kids engaged in reading and storytelling activities"
-            style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1600&auto=format&fit=crop');">
           </div>
           <div class="proj-copy">
             <h3>Storiza</h3>
@@ -798,16 +920,12 @@
           </div>
         </article>
 
-        <!-- ===== Previous Projects ===== -->
         <h3 style="color:#2c3e50; font-size:2rem; margin:2.25rem 0 1.25rem;">Previous Projects</h3>
 
-        <!-- Physics Playground -->
         <article class="proj-card">
-          <div 
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Students using interactive physics simulation software in classroom"
-            style="background-image:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1600&auto=format&fit=crop');">
           </div>
           <div class="proj-copy">
             <h3>Physics Playground</h3>
@@ -821,13 +939,10 @@
           </div>
         </article>
 
-        <!-- EarSketch -->
         <article class="proj-card">
-          <div 
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Teenagers creating music and learning programming with computers"
-            style="background-image:url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1600&auto=format&fit=crop');">
           </div>
           <div class="proj-copy">
             <h3>EarSketch</h3>
@@ -841,15 +956,12 @@
           </div>
         </article>
 
-        <!-- ===== Systematic Reviews ===== -->
         <h3 style="color:#2c3e50; font-size:2rem; margin:2.25rem 0 1.25rem;">Systematic Reviews</h3>
 
         <article class="proj-card">
-          <div 
-            class="proj-media"
-            role="img"
+          <div class="proj-media" role="img"
             aria-label="Research team collaborating on educational psychology studies"
-            style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&amp;w=1600&amp;auto=format&amp;fit=crop');">
+            style="background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');">
           </div>
           <div class="proj-copy">
             <h3>Growth Mindset</h3>
@@ -870,22 +982,22 @@
     <div id="publications" class="page">
       <div class="container">
         <h2 class="section-title">Publications</h2>
-             <!-- In Press -->
-    <div class="publication-year">
-      <h3>In Press</h3>
 
-      <div class="publication-item">
-        <div class="authors">Rahimi, S., Almond, R., Shute, V., &amp; Sun, C.</div>
-        <div class="title">Getting the first and second decimals right: Psychometrics of stealth assessment.</div>
-        <div class="journal">In M. P. McCreery &amp; S. K. Krach (Eds.), <em>Games as Stealth Assessments</em> (pp. 1–40). Lewes, DE: DIO Press.</div>
-      </div>
+        <div class="publication-year">
+          <h3>In Press</h3>
 
-      <div class="publication-item">
-        <div class="authors">Rahimi, S., Almond, R., &amp; Shute, V.</div>
-        <div class="title">Stealth assessment&#8217;s technical architecture.</div>
-        <div class="journal">In M. P. McCreery &amp; S. K. Krach (Eds.), <em>Games as Stealth Assessments</em> (pp. 1–25). Lewes, DE: DIO Press.</div>
-      </div>
-    </div>
+          <div class="publication-item">
+            <div class="authors">Rahimi, S., Almond, R., Shute, V., &amp; Sun, C.</div>
+            <div class="title">Getting the first and second decimals right: Psychometrics of stealth assessment.</div>
+            <div class="journal">In M. P. McCreery &amp; S. K. Krach (Eds.), <em>Games as Stealth Assessments</em> (pp. 1–40). Lewes, DE: DIO Press.</div>
+          </div>
+
+          <div class="publication-item">
+            <div class="authors">Rahimi, S., Almond, R., &amp; Shute, V.</div>
+            <div class="title">Stealth assessment&#8217;s technical architecture.</div>
+            <div class="journal">In M. P. McCreery &amp; S. K. Krach (Eds.), <em>Games as Stealth Assessments</em> (pp. 1–25). Lewes, DE: DIO Press.</div>
+          </div>
+        </div>
 
         <div class="publication-year">
           <h3>2024</h3>
@@ -961,7 +1073,7 @@
       </div>
     </div>
 
-    <!-- ================= News Page (replaced with the new grid & visuals) ================= -->
+    <!-- News Page -->
     <div id="news" class="page">
       <div class="container">
         <h2 class="section-title">News & Events</h2>
@@ -974,9 +1086,7 @@
             </div>
             <h3>NSF Grant Awarded for AI in Education Research</h3>
             <p>Class Lab has been awarded a $500,000 NSF grant to investigate the effectiveness of AI-powered personalized learning systems in undergraduate STEM education. This three-year project will involve collaboration with multiple universities and will directly impact over 2,000 students.</p>
-            <div class="news-icon">
-              <i class="fas fa-dollar-sign"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-dollar-sign"></i></div>
           </div>
 
           <div class="news-item">
@@ -986,9 +1096,7 @@
             </div>
             <h3>Best Paper Award at ICLS 2024</h3>
             <p>Dr. Rahimi and her team received the Best Paper Award at the International Conference of the Learning Sciences for their work on "Multimodal Creativity Assessment in Digital Learning Environments." The conference was held in Buffalo, NY, and attracted over 1,200 researchers from around the world.</p>
-            <div class="news-icon">
-              <i class="fas fa-trophy"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-trophy"></i></div>
           </div>
 
           <div class="news-item">
@@ -998,9 +1106,7 @@
             </div>
             <h3>Summer Research Symposium</h3>
             <p>Class Lab hosted its annual Summer Research Symposium, featuring presentations from graduate students and visiting scholars. This year's theme was "Emerging Technologies in Educational Assessment," with keynote speakers from MIT, Stanford, and Carnegie Mellon.</p>
-            <div class="news-icon">
-              <i class="fas fa-users"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-users"></i></div>
           </div>
 
           <div class="news-item">
@@ -1010,9 +1116,7 @@
             </div>
             <h3>Special Issue Publication</h3>
             <p>Dr. Rahimi served as guest editor for a special issue of the Journal of Educational Technology Research on "Stealth Assessment in Digital Learning Environments." The issue features 12 research articles from leading international researchers.</p>
-            <div class="news-icon">
-              <i class="fas fa-book"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-book"></i></div>
           </div>
 
           <div class="news-item">
@@ -1022,9 +1126,7 @@
             </div>
             <h3>Partnership with Local School District</h3>
             <p>Class Lab has established a new partnership with the Metro School District to pilot test our mobile assessment tools in middle school science classrooms. The collaboration will involve 15 schools and approximately 3,000 students over the next two years.</p>
-            <div class="news-icon">
-              <i class="fas fa-handshake"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-handshake"></i></div>
           </div>
 
           <div class="news-item">
@@ -1034,9 +1136,7 @@
             </div>
             <h3>AERA 2024 Presentation</h3>
             <p>Lab members presented four papers at the American Educational Research Association annual meeting in Philadelphia. Topics included VR in physics education, creativity assessment frameworks, and AI-driven learning analytics.</p>
-            <div class="news-icon">
-              <i class="fas fa-person-chalkboard"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-person-chalkboard"></i></div>
           </div>
 
           <div class="news-item">
@@ -1046,9 +1146,7 @@
             </div>
             <h3>IES Small Grant for Creativity Research</h3>
             <p>The Institute of Education Sciences has awarded Class Lab a $150,000 small grant to investigate the relationship between digital creativity tools and student creative thinking skills in K-12 settings.</p>
-            <div class="news-icon">
-              <i class="fas fa-lightbulb"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-lightbulb"></i></div>
           </div>
 
           <div class="news-item">
@@ -1058,9 +1156,7 @@
             </div>
             <h3>New Graduate Students Join the Lab</h3>
             <p>We welcome three new graduate students to Class Lab for the spring semester: Alex Kim (PhD in Educational Technology), Maria Santos (MS in Learning Sciences), and Robert Taylor (PhD in Physics Education). Their diverse backgrounds will strengthen our interdisciplinary research efforts.</p>
-            <div class="news-icon">
-              <i class="fas fa-graduation-cap"></i>
-            </div>
+            <div class="news-icon"><i class="fas fa-graduation-cap"></i></div>
           </div>
         </div>
       </div>
@@ -1099,10 +1195,12 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(pageName).classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      // close mobile menu when navigating
+      closeMenu();
     }
     
     function showFocusDetail() { showPage('focus'); }
-    function showProjectDetail() { alert('Project details would be shown here. In a full implementation, this would link to a detailed project page.'); }
+    function showProjectDetail() { alert('Project details would be shown here.'); }
 
     // Prevent default jumps
     document.querySelectorAll('.nav-links a').forEach(link => {
@@ -1143,7 +1241,7 @@
       if (form) {
         form.addEventListener('submit', (e) => {
           e.preventDefault();
-          alert('Thanks! Your message has been captured (demo). Hook this up to your backend or a service like Formspree/Netlify.');
+          alert('Thanks! Your message has been captured (demo).');
           form.reset();
         });
       }
@@ -1180,6 +1278,54 @@
         });
       }
     })();
+
+    /* ===== Accessible Hamburger Menu ===== */
+    const navbar = document.getElementById('navbar');
+    const burger = document.getElementById('hamburger');
+    const menu   = document.getElementById('primary-navigation');
+
+    function openMenu() {
+      navbar.classList.add('open');
+      document.body.classList.add('menu-lock');
+      burger.setAttribute('aria-expanded', 'true');
+      burger.setAttribute('aria-label', 'Close menu');
+      // focus first link for accessibility
+      const firstLink = menu.querySelector('a');
+      if (firstLink) firstLink.focus();
+      // close on outside click
+      document.addEventListener('click', outsideClose);
+      document.addEventListener('keydown', onKeyDown);
+    }
+    function closeMenu() {
+      navbar.classList.remove('open');
+      document.body.classList.remove('menu-lock');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Open menu');
+      document.removeEventListener('click', outsideClose);
+      document.removeEventListener('keydown', onKeyDown);
+    }
+    function toggleMenu() {
+      if (navbar.classList.contains('open')) closeMenu();
+      else openMenu();
+    }
+    function outsideClose(e) {
+      // ignore clicks inside the nav container
+      if (navbar.contains(e.target)) return;
+      closeMenu();
+    }
+    function onKeyDown(e) {
+      if (e.key === 'Escape') closeMenu();
+    }
+    burger.addEventListener('click', (e)=> {
+      e.stopPropagation();
+      toggleMenu();
+    });
+    // Close menu when a menu link is clicked (for SPA-style sections)
+    menu.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (!link) return;
+      closeMenu();
+    });
   </script>
 </body>
 </html>
